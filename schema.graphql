@@ -1,0 +1,34 @@
+type Campaign @entity(immutable: true) {
+  id: String!
+  executed: Boolean!
+  creator: Bytes! # address
+  title: String!
+  description: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Assignment @entity(immutable: true) {
+  id: String!
+  campaign: String! # Campaign
+  to: Bytes! # address
+  count: BigInt!
+}
+
+type CampaignFund @entity(immutable: true) {
+  id: Bytes!
+  campaign: String! # Campaign
+  amount: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CampaignRefund @entity(immutable: true) {
+  id: Bytes!
+  campaign: String! # Campaign
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

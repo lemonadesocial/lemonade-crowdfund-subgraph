@@ -1,0 +1,35 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: CrowdfundV1
+    network: optimism
+    source:
+      address: "0xb810c9c2B5451dC18172e1548549b5d05b6a47c7"
+      abi: CrowdfundV1
+      startBlock: 115775664
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Create
+        - Execute
+        - Fund
+        - Refund
+      abis:
+        - name: CrowdfundV1
+          file: ./abis/CrowdfundV1.json
+      eventHandlers:
+        - event: Create(address,string,string,(address,uint256)[],uint256)
+          handler: handleCreate
+        - event: Execute(indexed uint256)
+          handler: handleExecute
+        - event: Fund(indexed uint256,uint256)
+          handler: handleFund
+        - event: Refund(indexed uint256)
+          handler: handleRefund
+      file: ./src/crowdfund-v1.ts
