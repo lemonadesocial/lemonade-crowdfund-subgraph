@@ -1,6 +1,13 @@
+enum State {
+  PENDING
+  EXECUTED
+  CONFIRMED
+  REFUNDED
+}
+
 type Campaign @entity(immutable: true) {
   id: String!
-  executed: Boolean!
+  state: State!
   creator: Bytes! # address
   title: String!
   description: String!

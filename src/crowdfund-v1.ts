@@ -1,10 +1,16 @@
 import {
   Create as CreateEvent,
-  Execute as ExecuteEvent,
   Fund as FundEvent,
-  Refund as RefundEvent
+  StateChanged as StateChangedEvent
 } from "../generated/CrowdfundV1/CrowdfundV1"
 import { Assignment, Campaign, CampaignFund, CampaignRefund } from "../generated/schema"
+
+enum State {
+  PENDING,
+  EXECUTED,
+  CONFIRMED,
+  REFUNDED
+}
 
 export function handleCreate(event: CreateEvent): void {
   let entity = new Campaign(event.params.campaignId.toString())
@@ -12,7 +18,7 @@ export function handleCreate(event: CreateEvent): void {
   entity.creator = event.params.creator
   entity.title = event.params.title
   entity.description = event.params.description
-  entity.executed = false
+  entity.state = 'PENDING'
 
   let assignments = event.params.assignments
   for (let i = 0; i < assignments.length; i++) {
@@ -31,16 +37,6 @@ export function handleCreate(event: CreateEvent): void {
   entity.save()
 }
 
-export function handleExecute(event: ExecuteEvent): void {
-  let entity = Campaign.load(event.params.campaignId.toString())
-
-  if (!entity) return;
-
-  entity.executed = true;
-
-  entity.save()
-}
-
 export function handleFund(event: FundEvent): void {
   let entity = new CampaignFund(
     event.transaction.hash.concatI32(event.logIndex.toI32())
@@ -55,13 +51,31 @@ export function handleFund(event: FundEvent): void {
   entity.save()
 }
 
-export function handleRefund(event: RefundEvent): void {
-  let entity = new CampaignRefund(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.campaign = event.params.campaignId.toString()
+export function handleStateChanged(event: StateChangedEvent): void {
+  let entity = new Campaign(event.params.campaignId.toString())
+  const state = event.params.state
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  switch (state) {
+    case State.EXECUTED:
+      entity.state = 'EXECUTED'
+      break;
+    case State.REFUNDED:
+      entity.state = 'REFUNDED'
+
+      let campaignRefund = new CampaignRefund(
+        event.transaction.hash.concatI32(event.logIndex.toI32())
+      )
+
+      campaignRefund.campaign = event.params.campaignId.toString()
+    
+      campaignRefund.blockNumber = event.block.number
+      campaignRefund.blockTimestamp = event.block.timestamp
+      campaignRefund.transactionHash = event.transaction.hash 
+    case State.CONFIRMED:
+      entity.state = 'CONFIRMED'
+    default:
+      break;
+  }
+
+  entity.save()
 }
