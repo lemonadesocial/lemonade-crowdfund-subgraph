@@ -31,11 +31,3 @@ type CampaignFund @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
-
-type CampaignRefund @entity(immutable: true) {
-  id: Bytes!
-  campaign: String! # Campaign
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}

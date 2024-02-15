@@ -3,7 +3,7 @@ import {
   Fund as FundEvent,
   StateChanged as StateChangedEvent
 } from "../generated/CrowdfundV1/CrowdfundV1"
-import { Assignment, Campaign, CampaignFund, CampaignRefund } from "../generated/schema"
+import { Assignment, Campaign, CampaignFund } from "../generated/schema"
 
 enum State {
   PENDING,
@@ -61,18 +61,10 @@ export function handleStateChanged(event: StateChangedEvent): void {
       break;
     case State.REFUNDED:
       entity.state = 'REFUNDED'
-
-      let campaignRefund = new CampaignRefund(
-        event.transaction.hash.concatI32(event.logIndex.toI32())
-      )
-
-      campaignRefund.campaign = event.params.campaignId.toString()
-    
-      campaignRefund.blockNumber = event.block.number
-      campaignRefund.blockTimestamp = event.block.timestamp
-      campaignRefund.transactionHash = event.transaction.hash 
+      break;
     case State.CONFIRMED:
       entity.state = 'CONFIRMED'
+      break;
     default:
       break;
   }
