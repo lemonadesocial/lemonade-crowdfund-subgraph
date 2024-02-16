@@ -5,11 +5,12 @@ enum State {
   REFUNDED
 }
 
-type Campaign @entity(immutable: true) {
+type Campaign @entity(immutable: false) {
   id: String!
   state: State!
   creator: Bytes! # address
   title: String!
+  totalFunded: BigInt!
   description: String!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -27,7 +28,14 @@ type CampaignFund @entity(immutable: true) {
   id: Bytes!
   campaign: String! # Campaign
   amount: BigInt!
+  contributor: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+}
+
+type CampaignContributor @entity(immutable: false) {
+  id: Bytes! # contributor address
+  campaign: String! # Campaign
+  counter: Int! # number of contributions
 }
