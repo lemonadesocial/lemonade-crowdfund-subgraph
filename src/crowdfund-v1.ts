@@ -2,7 +2,6 @@ import { BigInt } from "@graphprotocol/graph-ts"
 import {
   Create as CreateEvent,
   Fund as FundEvent,
-  Fund1 as LegacyFundEvent,
   StateChanged as StateChangedEvent,
 } from "../generated/CrowdfundV1/CrowdfundV1"
 import { Assignment, Campaign, CampaignFund, CampaignContributor } from "../generated/schema"
@@ -60,36 +59,6 @@ export function handleFund(event: FundEvent): void {
   entity.campaign = event.params.campaignId.toString()
   entity.amount = event.params.amount
   entity.contributor = event.params.contributor
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-  campaign.save()
-  campaignContributor.save()
-}
-
-export function handleFundLegacy(event: LegacyFundEvent): void {
-  let entity = new CampaignFund(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  let campaign = Campaign.load(event.params.campaignId.toString())! // Should not be null
-  let campaignContributor = CampaignContributor.load(event.transaction.from)
-
-  campaign.totalFunded = campaign.totalFunded.plus(event.params.amount)
-
-  if (campaignContributor) {
-    campaignContributor.counter += 1
-  } else {
-    campaignContributor = new CampaignContributor(event.transaction.from)
-    campaignContributor.campaign = campaign.id
-    campaignContributor.counter = 1
-  }
-
-  entity.campaign = event.params.campaignId.toString()
-  entity.amount = event.params.amount
-  entity.contributor = event.transaction.from
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp

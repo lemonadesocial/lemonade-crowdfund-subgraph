@@ -52,55 +52,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "title",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "description",
-        "type": "string"
-      },
-      {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "count",
-            "type": "uint256"
-          }
-        ],
-        "indexed": false,
-        "internalType": "struct Assignment[]",
-        "name": "assignments",
-        "type": "tuple[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "campaignId",
-        "type": "uint256"
-      }
-    ],
-    "name": "Create",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "uint256",
         "name": "campaignId",
@@ -111,25 +62,6 @@
         "internalType": "address",
         "name": "contributor",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "Fund",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "campaignId",
-        "type": "uint256"
       },
       {
         "indexed": false,

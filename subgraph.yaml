@@ -23,12 +23,8 @@ dataSources:
         - name: CrowdfundV1
           file: ./abis/CrowdfundV1.json
       eventHandlers:
-        - event: Create(address,string,string,(address,uint256)[],uint256) # Legacy
-          handler: handleCreate
         - event: Create(indexed address,string,string,(address,uint256)[],indexed uint256)
           handler: handleCreate
-        - event: Fund(indexed uint256,uint256) # Legacy
-          handler: handleFundLegacy
         - event: Fund(indexed uint256,indexed address,uint256)
           handler: handleFund
         - event: StateChanged(indexed uint256,uint8)
