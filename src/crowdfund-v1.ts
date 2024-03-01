@@ -1,4 +1,5 @@
 import { BigInt } from "@graphprotocol/graph-ts"
+
 import {
   Create as CreateEvent,
   Fund as FundEvent,
@@ -14,7 +15,9 @@ enum State {
 }
 
 export function handleCreate(event: CreateEvent): void {
-  let entity = new Campaign(event.params.campaignId.toString())
+  let entity = new Campaign(
+    event.address.toHexString() + '_' + event.params.campaignId.toString()
+  )
 
   entity.creator = event.params.creator
   entity.title = event.params.title
@@ -43,8 +46,12 @@ export function handleFund(event: FundEvent): void {
   let entity = new CampaignFund(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  let campaign = Campaign.load(event.params.campaignId.toString())! // Should not be null
+  let campaign = Campaign.load(
+    event.address.toHexString() + '_' + event.params.campaignId.toString()
+  )
   let campaignContributor = CampaignContributor.load(event.params.contributor)
+
+  if (!campaign) return;
 
   campaign.totalFunded = campaign.totalFunded.plus(event.params.amount)
 
@@ -70,7 +77,12 @@ export function handleFund(event: FundEvent): void {
 }
 
 export function handleStateChanged(event: StateChangedEvent): void {
-  let entity = new Campaign(event.params.campaignId.toString())
+  let entity = Campaign.load(
+    event.address.toHexString() + '_' + event.params.campaignId.toString()
+  )
+
+  if (!entity) return;
+
   const state = event.params.state
 
   switch (state) {
