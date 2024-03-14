@@ -1,25 +1,21 @@
 {
   "optimism": {
     "CrowdfundV1": {
-      "address": "0xb810c9c2B5451dC18172e1548549b5d05b6a47c7",
       "startBlock": 115775664
     }
   },
   "arbitrum-one": {
     "CrowdfundV1": {
-      "address": "0xf91D84866557E21017Aa71f2aC35fe99e930fAaD",
       "startBlock": 177735075
     }
   },
   "arbitrum-sepolia": {
     "CrowdfundV1": {
-      "address": "0xAEC1c07DB370703Ddc5647FDF035735E315B77a8",
       "startBlock": 11131987
     }
   },
   "sepolia": {
     "CrowdfundV1": {
-      "address": "0x631492D5bF4d9Ae0311Eb2CB3a71347573c9A7ca",
       "startBlock": 5200518
     }
   }

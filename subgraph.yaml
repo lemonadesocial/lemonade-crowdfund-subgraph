@@ -8,7 +8,6 @@ dataSources:
     name: CrowdfundV1
     network: optimism
     source:
-      address: "0xb810c9c2B5451dC18172e1548549b5d05b6a47c7"
       abi: CrowdfundV1
       startBlock: 115775664
     mapping:
