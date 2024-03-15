@@ -8,7 +8,6 @@ dataSources:
     name: CrowdfundV1
     network: optimism
     source:
-      address: "0xb810c9c2B5451dC18172e1548549b5d05b6a47c7"
       abi: CrowdfundV1
       startBlock: 115775664
     mapping:
@@ -17,19 +16,16 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Create
-        - Execute
         - Fund
-        - Refund
+        - StateChanged
       abis:
         - name: CrowdfundV1
           file: ./abis/CrowdfundV1.json
       eventHandlers:
-        - event: Create(address,string,string,(address,uint256)[],uint256)
+        - event: Create(indexed address,string,string,(address,uint256)[],indexed uint256)
           handler: handleCreate
-        - event: Execute(indexed uint256)
-          handler: handleExecute
-        - event: Fund(indexed uint256,uint256)
+        - event: Fund(indexed uint256,indexed address,uint256)
           handler: handleFund
-        - event: Refund(indexed uint256)
-          handler: handleRefund
+        - event: StateChanged(indexed uint256,uint8)
+          handler: handleStateChanged
       file: ./src/crowdfund-v1.ts

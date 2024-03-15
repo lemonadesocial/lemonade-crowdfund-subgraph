@@ -1,8 +1,16 @@
-type Campaign @entity(immutable: true) {
+enum State {
+  PENDING
+  EXECUTED
+  CONFIRMED
+  REFUNDED
+}
+
+type Campaign @entity(immutable: false) {
   id: String!
-  executed: Boolean!
+  state: State!
   creator: Bytes! # address
   title: String!
+  totalFunded: BigInt!
   description: String!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -20,15 +28,14 @@ type CampaignFund @entity(immutable: true) {
   id: Bytes!
   campaign: String! # Campaign
   amount: BigInt!
+  contributor: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type CampaignRefund @entity(immutable: true) {
-  id: Bytes!
+type CampaignContributor @entity(immutable: false) {
+  id: Bytes! # contributor address
   campaign: String! # Campaign
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+  counter: Int! # number of contributions
 }
